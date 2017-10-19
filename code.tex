@@ -1,0 +1,138 @@
+\documentclass{jsarticle}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage{type1cm}
+\usepackage{bm}
+\title{機械学習入門}
+\author{。}
+\begin{document}
+\maketitle
+\section{確率論の基礎の復習}
+この章では、機械学習の数学的定式化に必要な確率論の基礎中の基礎を復習する。\\
+　目的はあくまで機械学習への応用であるため、細々とした議論は行わず、機械学習を定式化するために必要な最低限の項目だけ解説する\\
+　\\
+ 　\\
+\scalebox{1.1}{1.確率空間と確率変数}\\
+　標本空間$\Omega$に対し、次を満たす部分集合族$\mathcal{F}$をσ加法族と呼ぶ
+\begin{eqnarray}
+&1.&\phi,\Omega\in\mathcal{F}\\
+&2.&A\in\mathcal{F}\rightarrow A^c\in\mathcal{F}\\
+&3.&可算個の\Omega の部分集合 A_1,A_2,......,があり、任意のnに対してA_n\in\mathcal{F}なら、\cup^\infty_{n=1} A_n\in\mathcal{F}
+\end{eqnarray}
+　写像$P:\mathcal{F}\rightarrow[0,1]$が次を満たすとき、$P$を確率測度という
+\begin{eqnarray}
+&1.&P(\Omega)=1\\
+&2.&互いに素な可算個の集合A_1,A_2,...,\in\mathcal{F}に対し、P(\cup^\infty_{n=1}A_n)=\Sigma^\infty_{n=1}P(A_n)
+\end{eqnarray}
+　この$(\Omega,\mathcal{F},P)$の組を、確率空間と呼ぶ\\
+　$\mathcal{B}(\mathbb{R})$で、$\mathbb{R}$の開集合をすべて含む最小のσ加法族を表し、ボレル集合族と呼ぶ。\\
+　写像$X:\Omega\rightarrow\mathbb{R}$が次の条件を満たすとき、（1次元実）確率変数であるという
+\begin{eqnarray}
+任意のB\in\mathcal{B}(\mathbb{R})に対して、X^{-1}(B)\in\mathcal{F}
+\end{eqnarray}
+　ここで、$(\mathbb{R},\mathcal{B}(\mathbb{R}),P\circ X^{-1})$は確率空間となる\\
+　確率変数$X$に対して、分布関数$F_X:\mathbb{R}\rightarrow[0,1]$を次のように定義する
+\begin{eqnarray}
+F_X(x):=P(X\leq x)
+\end{eqnarray}
+　今回扱う確率変数は、その確率変数に対応する確率測度$P\circ X^{-1}$が$\mathbb{R}$上のボレル測度$\mu$に対して絶対連続であるものとし、ボレル測度とのラドンニコディム導関数を確率密度関数と呼ぶ\\
+　すなわち
+\begin{eqnarray}
+f_X(x):=\frac{d(P\circ X^{-1})(x)}{d\mu(x)}
+\end{eqnarray}
+　$\Omega$の部分集合族$\mathcal{G}$が、σ加法族の条件を満たし、さらに$\mathcal{G}\subset\mathcal{F}$が成り立つなら、$\mathcal{G}$を部分σ加法族という\\
+　$\Omega$の部分集合族$\mathcal{H}$に対して、$\sigma(\mathcal{H})$で$\mathcal{H}$を含む最小のσ-加法族を表すものとする。\\
+　また、確率変数$Y$に対して、$\sigma(Y)$で$Y$を可測にする最小のσ-加法族を表すとする。\\
+　\\
+　\\
+\scalebox{1.1}{2.独立性と条件付き期待値}\\
+　集合$A,B\in\mathcal{F}$が独立であるとは、$P(A\cup B)=P(A)P(B)$が成り立つことである\\
+　部分σ-加法族$\mathcal{G}_1,\mathcal{G}_2$が独立であるとは、任意の集合$A_1(\in\mathcal{G}_1),A_2(\in\mathcal{G}_2)$が独立となることである\\
+　確率変数$X,Y$が独立であるとは、σ-加法族$\sigma(X),\sigma(Y)$が独立となることである\\
+　集合$A\in\mathcal{F}$の、$B\in\mathcal{F}$に対する条件付き確率を次のように定義する
+\newpage
+\section{機械学習入門}
+ここからは本格的に機械学習の内容を学んでいく。\\
+　工学への応用であるため、数学的な厳密性に関しては数学書に比べればかなり適当なものになるがご容赦願いたい。\\
+　\\
+\scalebox{1.1}{1.クラス分け}\\
+ここでは母集団の濃度は可算無限であるとする。（応用上確実に有限なのだが、限りなく大きい場合を扱う）\\
+考察に用いたい各データの数値を、特徴量ベクトル$\bm{x}$\\
+そして分類したいクラスの集合を$C$と置く
+\begin{eqnarray}
+\bm{x}&\in & K^d(K^dは位相空間。Kは\mathbb{R}や\mathbb{N}の部分集合など様々で、具体的な中身は分析対象による)\\
+y&\in&C:=[c_1,c_2,...c_n](c_iは各クラス名)
+\end{eqnarray}
+　これに対して、$\bm{x}$と$y$が紐づけられた濃度$m:=|\mathcal{D}|$のデータ$\mathcal{D}:=[(\bm{x}_1,y_1),......,(\bm{x}_m,y_m)]$が与えられた上で、分類関数$\hat{y}:K^d\rightarrow C$を見繕いたい。\\
+この写像がどういった場合に優れていると定義するかは、状況による。（後々具体例を書く）\\
+　\\
+　確率空間$(\Omega,\mathcal{F},P)$があったとする。ここでの標本空間は上記の母集団と異なることに注意。\\
+　確率空間上の可測関数$X:\Omega\rightarrow K^d\times C$について考えたい。ただし、値域となる空間のσ-加法族は$K$が可算集合ならべき集合、$\mathbb{R}$など実数濃度であれば、$\sigma(\mathcal{B}(K^ｄ)\times 2^C)$とする。\\
+
+　データ$\mathcal{D}$の入力は、$m$個の$\Omega\rightarrow K^d\times C$な確率変数として捉えることができる\\
+　すなわち、入力データ$\mathcal{D}$に対して、$K^d\times C$‐値確率変数となるような独立同分布な確率変数列$[X_i]^m_{i=1}$が
+\begin{eqnarray}
+X_i=\mathcal{D}_i=(\bm{x_i},y_i)
+\end{eqnarray}
+という値になるものと考えればよい\\
+ ここで、データ観測前の所持情報を$\mathcal{F}_0$,データ観測後の所持情報を$\mathcal{F}_1$と置く。これはどちらも$\mathcal{F}$の部分σ-加法族で、$\mathcal{F}_0\subset\mathcal{F}_1$であれば、これらは増大情報系の条件を満たし。\\
+\begin{eqnarray}
+\mathcal{F}_1=\mathcal{F}_0\vee\sigma([X_i]^m_{i=1})
+\end{eqnarray}
+とおける\\
+余談:入力データを確率変数列で捉えるのは、数学的に厳密でありながら難解な数学の概念を持ち出さずに済む方法である。\\
+これは、数学上の都合だけかというとそうではなく、$\mathcal{F}_0$と$\mathcal{F}_1$の間に$\mathcal{F}_{\frac{l}{m}},l\in[1,2,......,m]$という部分σ-加法族があると考え、$\mathcal{F}_{\frac{l}{m}}:=\mathcal{F}_0\vee\sigma([X_i]^l_{i=1})$と置けば「通常データは１つずつ取り込まれていき、解析者の保持する情報が増えていく」という実際の状況にも対応させることができる
+\newpage
+写像$\hat{y}:K^d\rightarrow C$の満たす集合を$Y$とおく。$Y$の位相は後述の$F$を連続関数にする最弱の位相と定義する\\
+　\\ 
+　入力データ$\mathcal{D}$に対して、最適な写像$\hat{y}$を導き出したい。\\
+　ただし、$Y$の任意の元を取ってこれるかと言えばそうではなく、ある程度制約をつけなければ役に立たない（オーバーフィット、具体例を交えて後述）\\
+選択されたモデル$M$(詳細は後述)に対して、$Y_M(\subset Y)$でモデルに対応する分類関数の集合とし、この上で最適化を行っていく。\\
+　見つけたい最適な分類関数は、このように書ける
+\begin{eqnarray}
+\tilde{y}:=argmax_{y\in Y_M}[F_\mathcal{D}(y)]
+\end{eqnarray}
+　ただし、$F_\mathcal{D}$はモデルと入力データから定まる$F_\mathcal{D}:Y\rightarrow\mathbb{R}$の汎関数である（$Y$は線形空間ではないので厳密には汎関数ではないが、「引数が関数の関数」という意味でここでは「汎関数」と呼ぶものとする）\\
+ 　\\
+データ$\mathcal{D}$を観測する前のC上の密度関数を事前分布と呼び、観測後の密度関数は事後分布という。\\
+$X_C$で$C$への射影、$X_K$で$K^d$への射影を表すものとし、$\tilde{\mathcal{D}}:=\{\omega;[X(\omega)]_{i=1}^m=\mathcal{D}(\omega)\}$とおく
+\begin{eqnarray}
+f^{\theta_0}_{X_C}(c)&:&事前分布\\
+f^{\theta_1}_{X_C}(c|\tilde{\mathcal{D}})&:&事後分布
+\end{eqnarray}
+ただし、$f_X(x|A),A\in\mathcal{F}$は条件付き分布とし、確率密度関数$f_X(x)$に対して、$\omega\in A$という情報がある上での$X(\omega)$の密度関数を表すものとする。すなわち
+\begin{eqnarray}
+f^{\theta_1}_{X_C}(c|\tilde{\mathcal{D}}):=f^{\theta_1}_{X_C(\omega)|\omega\in\tilde{\mathcal{D}}}(c)P(\tilde{\mathcal{D}})^{-1}
+\end{eqnarray}
+ただし、$P(\tilde{\mathcal{D}})=0$となる場合(例えば$y=c_i$のとき$\bm{x}$がガウス分布になる場合、必然この測度が$0$になる)は、次のように陰的に定義できる
+\begin{eqnarray}
+P[\{X_C(\omega)=c_i\}|\{\omega;[X^i_C]^m_{i=1}=\mathcal{D}_C,\bm{x}_{all}\in A\}]=\int_Af_{X_C}(c_i|\tilde{\mathcal{D}})d\bm{x}_{all}
+\end{eqnarray}
+が、任意の$A\in\mathcal{B}(K^{md})$に対して成り立つような関数を、事後分布と呼ぶ(零集合を除き一意)\\
+ただし、$\bm{x}_{all}$は$K^{md}$の元で、$\mathcal{D}_C$はデータ$\mathcal{D}$の$C^m$への射影。\\
+　\\
+ベイズの定理：\\
+事後分布は事前分布とデータの尤度の積に比例する\\
+すなわち、ある定数$L$が存在し、任意の$c_i\in C$に対して
+\begin{eqnarray}
+f^{\theta_1}_{X_C}(c_i|\tilde{\mathcal{D}})=Lf^{\theta_0}_{X_C}(c_i)f^{\tilde{\theta}}_{X_K}(x|\{\omega;X_C(\omega)=c_i\})
+\end{eqnarray}
+　\\
+ここで、事前分布、事後分布、尤度関数、パラメータの可測性、$Y$の制限、汎関数$F_\mathcal{D}$の組を、「選択されたモデル」といい、$M$と表記する。\\
+\begin{eqnarray}
+M:=(f^{\theta_0}_{X_C}(c),f^{\theta_1}_{X_C}(c|\tilde{\mathcal{D}}),f^{\tilde{\theta}}_{X_K}(x|\{\omega;X_C(\omega)=c\}), (mesurerable),Y_M,F_\mathcal{D})
+\end{eqnarray}
+$(K^d,C,M,\mathcal{D})$の組を「汎化機械学習問題」と呼ぶ\\
+$(13)$で定義される分類関数$\hat{y}(\bm{x})$を「汎化機械学習問題の解」と呼ぶ
+\newpage
+
+参考文献\\
+http://www2.itc.kansai-u.ac.jp/~afujioka/2014/ig/141112ig.pdf
+
+
+
+
+
+
+
+\end{document}
