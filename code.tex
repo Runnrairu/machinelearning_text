@@ -55,19 +55,19 @@ f_X(x):=\frac{d(P\circ X^{-1})(x)}{d\mu(x)}
 ここからは本格的に機械学習の内容を学んでいく。\\
 　工学への応用であるため、数学的な厳密性に関しては数学書に比べればかなり適当なものになるがご容赦願いたい。\\
 　\\
-\scalebox{1.1}{1.クラス分け}\\
+\scalebox{1.1}{1.問題設定}\\
 ここでは母集団の濃度は可算無限であるとする。（応用上確実に有限なのだが、限りなく大きい場合を扱う）\\
 考察に用いたい各データの数値を、特徴量ベクトル$\bm{x}$\\
 そして分類したいクラスの集合を$C$と置く
 \begin{eqnarray}
-\bm{x}&\in & K^d(K^dは位相空間。Kは\mathbb{R}や\mathbb{N}の部分集合など様々で、具体的な中身は分析対象による)\\
-y&\in&C:=[c_1,c_2,...c_n](c_iは各クラス名)
+\bm{x}&\in & K^d(K^dはスカラー体K_S上の線形位相空間。Kは\mathbb{R}や\mathbb{Q}の部分集合など様々で、具体的な中身は分析対象による)\\
+y&\in&C:=[c_1,c_2,...c_n,...](y_iは各クラス名,実数濃度でもよい)
 \end{eqnarray}
 　これに対して、$\bm{x}$と$y$が紐づけられた濃度$m:=|\mathcal{D}|$のデータ$\mathcal{D}:=[(\bm{x}_1,y_1),......,(\bm{x}_m,y_m)]$が与えられた上で、分類関数$\hat{y}:K^d\rightarrow C$を見繕いたい。\\
 この写像がどういった場合に優れていると定義するかは、状況による。（後々具体例を書く）\\
 　\\
 　確率空間$(\Omega,\mathcal{F},P)$があったとする。ここでの標本空間は上記の母集団と異なることに注意。\\
-　確率空間上の可測関数$X:\Omega\rightarrow K^d\times C$について考えたい。ただし、値域となる空間のσ-加法族は$K$が可算集合ならべき集合、$\mathbb{R}$など実数濃度であれば、$\sigma(\mathcal{B}(K^ｄ)\times 2^C)$とする。\\
+　確率空間上の可測関数$X:\Omega\rightarrow K^d\times C$について考えたい。ただし、値域となる空間のσ-加法族は$K$が可算集合ならべき集合、$\mathbb{R}$など実数濃度であれば、$\sigma(\mathcal{B}(K^d)\times \mathcal{B}(C))$とする。\\
 
 　データ$\mathcal{D}$の入力は、$m$個の$\Omega\rightarrow K^d\times C$な確率変数として捉えることができる\\
 　すなわち、入力データ$\mathcal{D}$に対して、$K^d\times C$‐値確率変数となるような独立同分布な確率変数列$[X_i]^m_{i=1}$が
@@ -92,7 +92,7 @@ X_i=\mathcal{D}_i=(\bm{x_i},y_i)
 \begin{eqnarray}
 \tilde{y}:=argmax_{y\in Y_M}[F_\mathcal{D}(y)]
 \end{eqnarray}
-　ただし、$F_\mathcal{D}$はモデルと入力データから定まる$F_\mathcal{D}:Y\rightarrow\mathbb{R}$の汎関数である（$Y$は線形空間ではないので厳密には汎関数ではないが、「引数が関数の関数」という意味でここでは「汎関数」と呼ぶものとする）\\
+　ただし、$F_\mathcal{D}$はモデルと入力データから定まる$F_\mathcal{D}:Y\rightarrow\mathbb{R}$の汎関数である（$Y$は必ずしも線形空間ではないので厳密には汎関数ではないが、「引数が関数の関数」という意味でここでは「汎関数」と呼ぶものとする）\\
  　\\
 データ$\mathcal{D}$を観測する前のC上の密度関数を事前分布と呼び、観測後の密度関数は事後分布という。\\
 $X_C$で$C$への射影、$X_K$で$K^d$への射影を表すものとし、$\tilde{\mathcal{D}}:=\{\omega;[X(\omega)]_{i=1}^m=\mathcal{D}(\omega)\}$とおく
@@ -100,17 +100,27 @@ $X_C$で$C$への射影、$X_K$で$K^d$への射影を表すものとし、$\til
 f^{\theta_0}_{X_C}(c)&:&事前分布\\
 f^{\theta_1}_{X_C}(c|\tilde{\mathcal{D}})&:&事後分布
 \end{eqnarray}
-ただし、$f_X(x|A),A\in\mathcal{F}$は条件付き分布とし、確率密度関数$f_X(x)$に対して、$\omega\in A$という情報がある上での$X(\omega)$の密度関数を表すものとする。すなわち
+　ただし、$f_X(x|A),A\in\mathcal{F}$は条件付き分布とし、確率密度関数$f_X(x)$に対して、$\omega\in A$という情報がある上での$X(\omega)$の密度関数を表すものとする。すなわち
 \begin{eqnarray}
 f^{\theta_1}_{X_C}(c|\tilde{\mathcal{D}}):=f^{\theta_1}_{X_C(\omega)|\omega\in\tilde{\mathcal{D}}}(c)P(\tilde{\mathcal{D}})^{-1}
 \end{eqnarray}
-ただし、$P(\tilde{\mathcal{D}})=0$となる場合(例えば$y=c_i$のとき$\bm{x}$がガウス分布になる場合、必然この測度が$0$になる)は、次のように陰的に定義できる
+　ただし、$P(\tilde{\mathcal{D}})=0$となる場合(例えば$y=c_i$のとき$\bm{x}$がガウス分布になる場合、必然この測度が$0$になる)は、次のように定義する\\
 \begin{eqnarray}
-P[\{X_C(\omega)=c_i\}|\{\omega;[X^i_C]^m_{i=1}=\mathcal{D}_C,\bm{x}_{all}\in A\}]=\int_Af_{X_C}(c_i|\tilde{\mathcal{D}})d\bm{x}_{all}
+f^{\theta_1}_{X_C}(c_i|\cdot):=\frac{dP(\{\omega;X_C(\omega)=c_i\}\cup\cdot\})}{dP(\{\omega;([X_i]_{i=1}^m)^{-1}(\cdot))\}}
 \end{eqnarray}
-が、任意の$A\in\mathcal{B}(K^{md})$に対して成り立つような関数を、事後分布と呼ぶ(零集合を除き一意)\\
-ただし、$\bm{x}_{all}$は$K^{md}$の元で、$\mathcal{D}_C$はデータ$\mathcal{D}$の$C^m$への射影。\\
+ただし、データ$\mathcal{D}$に対して、$\{\omega;([X_i]_{i=1}^m)^{-1}(\cdot))\}:=\cap_{i=1}^m\{\omega;X_i^{-1}(\mathcal{D}_i)\}$と定義される\\
+この関数については、応用上必要であれば後述の「一般化モンテカルロ法」で数値計算を行う。
 　\\
+　\\
+ここで、事前分布、尤度関数、パラメータの可測性、$Y$の制限、汎関数$F_\mathcal{D}$の組を、「選択されたモデル」といい、$M$と表記する。\\
+\begin{eqnarray}
+M:=(f^{\theta_0}_{X_C}(c),f^{\tilde{\theta}}_{X_K}(x|\{\omega;X_C(\omega)=c\}), (mesurerable),Y_M,F_\mathcal{D})
+\end{eqnarray}
+$(K^d,C,M,\mathcal{D})$の組を「汎化機械学習問題」と呼ぶ\\
+$(13)$で定義される分類関数$\hat{y}(\bm{x})$を「汎化機械学習問題の解」と呼ぶ\\
+　\\
+　\\
+\scalebox{1.1}{2.各種テクニック}\\
 ベイズの定理：\\
 事後分布は事前分布とデータの尤度の積に比例する\\
 すなわち、ある定数$L$が存在し、任意の$c_i\in C$に対して
@@ -118,19 +128,204 @@ P[\{X_C(\omega)=c_i\}|\{\omega;[X^i_C]^m_{i=1}=\mathcal{D}_C,\bm{x}_{all}\in A\}
 f^{\theta_1}_{X_C}(c_i|\tilde{\mathcal{D}})=Lf^{\theta_0}_{X_C}(c_i)f^{\tilde{\theta}}_{X_K}(x|\{\omega;X_C(\omega)=c_i\})
 \end{eqnarray}
 　\\
-ここで、事前分布、事後分布、尤度関数、パラメータの可測性、$Y$の制限、汎関数$F_\mathcal{D}$の組を、「選択されたモデル」といい、$M$と表記する。\\
+ここで、事後分布が事前分布のパラメータ違いで同種の分布のとき、事前分布を「共役事前分布」と呼び、事後分布のパラメータは事前分布のパラメータと入力データの関数で書ける
 \begin{eqnarray}
-M:=(f^{\theta_0}_{X_C}(c),f^{\theta_1}_{X_C}(c|\tilde{\mathcal{D}}),f^{\tilde{\theta}}_{X_K}(x|\{\omega;X_C(\omega)=c\}), (mesurerable),Y_M,F_\mathcal{D})
+すなわち、写像\theta_1:\Theta\rightarrow\Theta が存在し  \theta_1:=\theta_1(\theta,\mathcal{D})
 \end{eqnarray}
-$(K^d,C,M,\mathcal{D})$の組を「汎化機械学習問題」と呼ぶ\\
-$(13)$で定義される分類関数$\hat{y}(\bm{x})$を「汎化機械学習問題の解」と呼ぶ
-\newpage
+今後、モデルMにおいて事前分布をこのパラメータの関数で書いた場合、事前分布は共役事前分布であるものとする\\
+　\\
+　\\
+\scalebox{1.1}{3.分類}\\
+ここから、このモデルの場合分けでいろいろな手法を定義していく\\
+基本的に核となるのは$F_\mathcal{D}$と$Y_M$\\
+$C$が可算集合のとき、$Y_M$は往々にして「クラスに対する境界の引き方」で定義される。代わりにモデルの$Y_M$部分に境界の引き方を記入してもよい\\
+　\\
+1.線形回帰\\
+最も基本的なクラスタリングである。\\
+$C$の濃度が2で、$Y_M$によって定義される境界が$K^d$の$d-1$次元アフィン部分空間となるモデルを線形回帰モデルと呼ぶ。\\
+$C=\{c_1,c_2\}$とする\\
+すなわち、境界線は次のように定義される\\
+任意の$ij$成分に対して$a_{ij}\in K_S$となる$d$次正方行列$\bm{A}$と$K^d$上のベクトル$\bm{b}$が存在し、
+\begin{eqnarray}
+\bm{A}\bm{x}+\bm{b}=0
+\end{eqnarray}
+となる。行列$\bm{A}$とベクトル$b$の選び方は評価汎関数$F_{\mathcal{D}}$の形による。（距離の２乗の最小化であることが多い）\\
 
+2.ロジスティック判別\\
+基本はほとんど上記の線形回帰と同じである。\\
+ただし、推定の対象は$c_2$である「確率」\\
+線形回帰で導き出した関数$f(\bm{x})=\bm{A}\bm{x}+\bm{b}$を用いて
+\begin{eqnarray}
+log(\frac{y}{1-y})=\bm{A}\bm{x}+\bm{b}
+\end{eqnarray}
+これで点$\bm{x}$で$c_2$となる確率$p$が求められる
+
+3.決定木\\
+線形回帰の拡張である。\\
+$C$の濃度は有限であるものとし、$|C|\leq 2^n$となるよう境界線形関数列$\{f_i\}_{i=1}^n$を定義し、それに対する正負の組み合わせでクラスを分類する\\
+　\\
+4.ランダムフォレスト\\
+
+5.サポートベクターマシン\\
+
+
+\newpage
+\section{ニューラルネットワーク}
+２章３の分類に含めても構わなかったのだが、あまりにも長くなるため、ニューラルネットワーク（ディープラーニング）に関してだけは、２個の章に分けて解説する。数学的に最も濃厚かつ難解で、数学科生にとっては一番楽しめる内容になることかと思う。\\
+　\\
+1.ニューラルネットワークとは\\
+ （人工）ニューラルネットワークとは、脳回路の人工的再現である。一つ以上の入力を受けて、値を出力する。ここで言う入力の数とは、先述のモデルで言えば$d$のことである。（以降、他の記号はすべてリセットされたし。$K=\mathbb{R}$とする）\\
+　まずは隠れ層が１つである場合を考える\\
+　入力層から入力された値のある重みづけを、隠れ層では活性化関数$\eta:\mathbb{R}\rightarrow \mathbb{C}$の引数にする。また、この先にも重みづけを行う。すなわち、入力データを$\bm{x}$,入力後の重みづけベクトルの各成分を$a_j,b_j\in\mathbb{R}$,関数で写像を飛ばしたあとの重みづけベクトルの各成分を$C_j\in\mathbb{C}$とおくと、このニューラルネットワークが示す関数$g:\mathbb{R}\rightarrow\mathbb{C}$は
+\begin{eqnarray}
+g(\bm{x}):=\Sigma_{j=1}^nC_j\eta(a_jx_j-b_j)
+\end{eqnarray}
+と表せる。ただし$n$は隠れ層のノード数である。\\
+　入力に対して、正しい出力がわかっている状況で正しい出力が出るようにするにはこの重みづけのパラメータを調整すればよい。そのようにして、正しい関数$f:\mathbb{R}^d\rightarrow\mathbb{C}$の近似$g$を探索するのが「ニューラルネットワーク」である。\\
+　ところで、上記の式は、ノード数$n\rightarrow\infty$とすることで、積分にすることができる。すなわち
+\begin{eqnarray}
+g(\bm{x}):=\int_{\mathbb{Y}^{d+1}}T(a,b)\eta(a\cdot x-b)d\mu(a,b)
+\end{eqnarray}
+　ただし、$T(a,b)$は、複素数列$C_j$の連続版に当たる写像$T:\mathbb{Y}^{d+1}\rightarrow\mathbb{C}$であり、$a\cdot x$はユークリッド内積\\
+　このような積分の存在は仮定する（$T,\eta$に対してこの積分が収束するような測度$\mu$のみを扱う）。また、$\mu$にルベーグ測度との絶対連続性を課さなければ、離散化はこの特別な場合として書ける。\\
+　\\
+　\\
+2.リッジレット作用素\\
+ではその関数$T:\mathbb{Y}^{d+1}\rightarrow\mathbb{C}$を求めるにはどうすればいいか。これは実は既存研究で解析的に書ける。\\
+　\\
+関数$f\in L^1(\mathbb{R}^{d};\mathbb{C})$の、$\psi\in L^\infty(\mathbb{R};\mathbb{C})$に対するリッジレット作用素$\mathcal{R}_\psi$を次のように定義する
+\begin{eqnarray}
+(\mathcal{R}_\psi f)(a,b):=\int_{\mathbb{R}^{d}}f(\bm{x})\overline{\psi(a\cdot\bm{x}-b)}|a|^sd\bm{x}
+\end{eqnarray}
+　\\
+次に、双対リッジレット作用素を定義する。\\
+$\mathcal{R}^*_\cdot \cdot:L^1(\mathbb{Y}^{d+1};\mathbb{C},|a|^{-s}dadb)\times L^\infty(\mathbb{R};\mathbb{C})\rightarrow L^\infty(\mathbb{R}^d)$を定義する
+\begin{eqnarray}
+(\mathcal{R}^*_\eta T)(\bm{x}):=\int_{Y^{d+1}}T(a,b)\eta(a\cdot\bm{x}-b)|a|^{-s}d\mu(a,b)
+\end{eqnarray}
+これは適当な条件（要検証）の元で、リッジレット作用素$\mathcal{R}_\eta$の双対作用素となる。\\
+　\\
+定義：\\
+次の積分が有界で非零のとき、$\psi,\eta$に対する核が許容的であるという
+\begin{eqnarray}
+K_{\psi,\eta}:=(2\pi)^{d-1}\int_\mathbb{R}\frac{\overline{\hat{\psi}(\zeta)}\eta{\zeta}}{|\zeta|^d}d\zeta
+\end{eqnarray}
+　\\
+定理：再構成公式\\
+$\psi,\eta$は上述の関数と同一集合上の元であるとし、また核は許容的であるとする。このとき、次の式が成り立つ。
+\begin{eqnarray}
+f(\bm{x})=\int_{\mathbb{Y}^{d+1}}(\mathcal{R}_\psi f)(a,b)\eta(a\cdot\bm{x}-b)dadb
+\end{eqnarray}
+よって、$T:=\mathcal{R}_\psi f$と置くと、この積分的ニューラルネットワークは関数$f$と同じになる。実際のニューラルネットワークではこれを離散化するため、関数$f$の近似となる。\\
+　\\
+　\\
+3.離散化\\
+ここまで、連続的に三層パーセプトロンを考察してきたが、実際のニューラルネットワークにおいて、隠れ層のノード数は有限である。そのため、中間層素子のの離散化を考える必要がある。\\
+　\\
+活性化関数$\eta$に対して、すべての中間層素子の集合を「辞書」と呼ぶ。
+\begin{eqnarray}
+\mathcal{D}:=\{h(\cdot;a,b)|(a,b)\in\mathbb{Y}^{d+1}\}
+\end{eqnarray}
+ただし、$h(x;a,b):=\eta(a\cdot\bm{x}-b)$\\
+　\\
+辞書の部分集合$D$（以下、部分辞書と呼称する）と、関数$T:\mathbb{Y}^{d+1}\rightarrow\mathbb{C}$の内積を次のように定義する
+\begin{eqnarray}
+(DT)(\bm{x}):=\int_D T(a,b)h(\bm{x};a,b)d\mu(a,b)
+\end{eqnarray}
+ただし、この積分は実際には適宜局所座標系をとらないと面倒である。\\
+ここで、このような形でかけるとき、これは実際に実装されるニューラルネットワークの挙動になる。
+\begin{eqnarray}
+(DT)(\bm{x})=\Sigma_D T(a,b)h(\bm{x};a,b)
+\end{eqnarray}
+部分辞書$D$が可算集合であるとき、これを「離散化」という。\\
+離散化の評価は必要に応じて様々な関数空間のノルムで行われる。\\
+困ったことに、$\mathcal{D}$の閉方はヒルベルト空間であるとは限らないで、一般には正規直交基底をとれない。
+\newpage
+4.一般化されたリッジレット作用素\\
+実際のニューラルネットワークでは、様々な関数が活性化関数として使われる。\\
+ここで問題になってくるのは、ReLU（$\eta(x):=x_+$）のような、「実際によく使われるが上記の定義では定式化できない（$L^\infty$の元ではない）」場合である。\\
+そこで、この章ではリッジレット作用素を超関数論で一般化し、活用範囲を大幅に広げる
+
+　\\
+まず、上述の$(a,b)\in\mathbb{Y}^{d+1}$を極座標変換する
+\begin{eqnarray}
+u:=a/|a|,\alpha:=1/|a|,\beta:=b/|a|
+\end{eqnarray}
+特に誤解の恐れがない状況では、座標系の取り方によらずパラメータの空間を$\mathbb{Y}$と表記する\\
+　\\
+リッジレット変換を次のように超関数として定義する\\
+$f\in\mathcal{X}(\mathbb{R}^d)$の$\psi\in\mathcal{Z}(\mathbb{R})$（空間の定義は後述）によるリッジレット変換を、こう定義する
+\begin{eqnarray}
+(\mathcal{R}_\psi f)(u,\alpha,\beta):=\overline{\int_{\mathbb{R}}\overline{Rf(u,az+\beta)}\psi(z)dz}
+\end{eqnarray}
+ただし、$R$はラドン変換
+\includegraphics[width=10cm]{DNYwj57VoAEsMfG.jpg}\\
+（ここに自分で図を書いておく）\\
+
+定理\\
+この組み合わせにおいて、作用素$\mathcal{R}_\cdot \cdot:\mathcal{X}(\mathbb{R}^d)\times\mathcal{Z}(\mathbb{R})\rightarrow\mathcal{Y}(\mathbb{Y}^{d+1})$は、双線形写像である\\
+　\\
+定理\\
+$\mathcal{X}=L^1$とし、$\psi\in\mathcal{S}(\mathbb{R})$を固定する。このときリッジレット作用素$\mathcal{R}_\psi$は有界作用素\\
+　\\
+定義\\
+関数$T\in\mathcal{Y}(\mathbb{Y}^{d+1})$の、活性化関数$\eta\in\mathcal{W}(\mathbb{R})$による双対リッジレット変換を次のように定義する
+\begin{eqnarray}
+(\mathcal{R}^*_\eta T)(\bm{x}):=lim_{\delta\rightarrow\infty,\varepsilon\rightarrow0}\int_{\mathbb{S}^{d-1}}\int^\delta_\varepsilon\int_{\mathbb{R}}T(u,\alpha,u\cdot x-\alpha z)\eta(z)\frac{dzd\alpha du}{\alpha^d}
+\end{eqnarray}
+$\mathcal{R}^*_\eta $は、存在すれば$\mathcal{R}_\eta$の双対作用素
+　\\
+活性化関数は超関数でもよい。次に許容条件について定義する\\
+　\\
+定義\\
+$(\psi,\eta)\in\mathcal{S}\times \mathcal{S}`$が許容的であるとは、任意の原点を含む近傍$\Omega$に対し、次の積分が0でない値に収束し$\hat{\eta}$が局所可積分であることを言う
+\begin{eqnarray}
+K_{\psi,\eta}:=(2\pi)^{d-1}(\int_{\Omega/\{0\}}+\int_{\mathbb{R}/\Omega})\frac{\overline{\hat{\psi}(\zeta)}\hat{\eta}(\zeta)}{|\zeta|}
+\end{eqnarray}
+また、この二つの関数が等しいとき、これを自己許容的という\\
+　\\
+定理（リッジレット変換の$L^2$拡張性）\\
+$\psi\in\mathcal{S}$は自己許容的であるとし、$K_{\psi,\psi}=1$とする。このとき、$L^1\cap L^2(\mathbb{R}^d)$上のリッジレット作用素は$L^2(\mathbb{R}^d)$上の作用素に一意に拡大でき、$||\mathcal{R}_\psi f||^2=||f||^2$（等距離写像）\\
+　\\
+具体的な再構成公式や離散化などは参考文献を参照されたし
+　\\
+　\\
+　\\
+
+
+
+\newpage
+\section{ディープラーニング}
+いよいよここから、第三次人工知能ブームを巻き起こしたとして巷で話題の深層学習に入り込んでいく。数学的なレベルは前章よりも大幅に上がるので、前章で知識不足を感じた方は関数解析や確率解析,圏論の書籍を片手に読むことを勧める。\\
+　\\
+深層学習とは\\
+前章で扱ったニューラルネットワークは、入力層と隠れ層と出力層が１つずつであったが、ここからは隠れ層が２つ以上のもの、つまり$n$層パーセプトロン$(n>3)$を扱っていく\\
+　\\
+デノイジング・オートエンコーダー（DAE）とは\\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
 参考文献\\
 http://www2.itc.kansai-u.ac.jp/~afujioka/2014/ig/141112ig.pdf
+https://datumstudio.jp/blog/\\
+http://sinhrks.hatenablog.com/entry/2014/12/15/081113
 
-
-
+　\\
+　
 
 
 
