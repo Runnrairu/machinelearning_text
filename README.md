@@ -1,2 +1,5 @@
 # machinelearning_text
 機械学習の測度論的再構築、並びに既存モデルの統一と新モデルの開発を目指す
+
+モナコインアドレス（送金してくれると著者のやる気がアップします）
+MTsVua9rmWH6GsXHdkF7c7x4AxJYHSzjH2
