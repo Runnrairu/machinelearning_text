@@ -5,6 +5,10 @@
 \usepackage{type1cm}
 \usepackage{bm}
 
+
+\DeclareMathOperator*{\argmin}{argmin}
+
+
 \title{機械学習原論}
 \author{}
 
@@ -54,7 +58,7 @@
 
 汎関数$F:Y\rightarrow\mathbb{R}$の集合を$Y^*$と書く。位相は弱位相であるとし、$\mathcal{F}_1$-可測な確率変数$F^*:\Omega\rightarrow Y^*$によって定義される$F_\mathcal{D}:=F^*(\omega)$に対して
 \begin{align}
-\hat{f}:=argmin_{f\in Y_M}F_\mathcal{D}(f)
+\hat{f}:=\argmin_{f\in Y_M}F_\mathcal{D}(f)
 \end{align}
 
 を満たす$\hat{f}\in Y_M$を見つける。これが機械学習における大枠の問題設定である。
