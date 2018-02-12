@@ -5,3 +5,5 @@
 
 円天アドレス（送金してくれると著者のやる気がアップします）  
 YTePm8qX29kBPzr6vEEQz9k7ZtQHaHweWu
+
+2018/08/12 ver3.00
