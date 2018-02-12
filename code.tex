@@ -1,12 +1,21 @@
-\documentclass{jsarticle}
-\usepackage[dvipdfmx]{graphicx}
+\documentclass[dvipdfmx, a4paper]{jsarticle}
+
+\usepackage{graphicx}
 \usepackage{amsmath, amssymb}
+\usepackage{mathtools}  % \coloneqq
 \usepackage{type1cm}
 \usepackage{bm}
+
+
+\DeclareMathOperator*{\argmin}{argmin}
+
+
 \title{機械学習原論}
 \author{}
+
 \begin{document}
 \maketitle
+
 \section{はじめに}
 世は空前の人工知能ブーム。猫も杓子もAIだディープラーニングだと、なんでも機械学習に任せてしまえばいいという考えが蔓延している。
 
@@ -17,13 +26,11 @@
 その気持ちはよくわかる。かく言う私もそうだった。世間には「一般向け」と称した、あまりにも粗雑な機械学習の入門書が溢れかえっており、数学的にまともな文献は少数派だ。もちろん一部存在はするが、とてもじゃないが初学者が読んで役立てることはあまりに難しい。
 
 数学的に適当、とは具体的にどういうことなのか。これは大きく分けて３つあるように思う。
-
-1.確率測度と確率密度関数が区別されていない
-
-2.確率変数であるものと確率変数でないものが区別されていない
-
-3.目の前の関数がどこからどこへの写像かわからない
-
+\begin{enumerate}
+\item 確率測度と確率密度関数が区別されていない
+\item 確率変数であるものと確率変数でないものが区別されていない
+\item 目の前の関数がどこからどこへの写像かわからない
+\end{enumerate}
 慣れてくるとなんとなく忖度して雰囲気で読んでいくことができるようになるが、厳密に読んでいく訓練を受けてきた数学徒にはなかなか酷な話だ。
 
 そのため、本書の前半ではなるべく数学科の解析学の授業で習う用語、流儀を用いて、機械学習の基礎を書くことを心掛けた。本書の内容を理解すれば、そう苦労せず一般向けの機械学習資料を読んでいくことができるはずだ。
@@ -41,18 +48,18 @@
 
 線形位相空間$\mathcal{X}$を特徴量空間、線形位相空間$\mathcal{Y}$をラベル空間と呼び、それぞれの元$x,y$を「特徴量」「ラベル」と呼ぶ。
 
-ここで、独立同分布な確率変数列$\mathcal{D}:=\{X_i(\omega)\}_{i=1}^n$を考える。各$X_i$は$X_i:\Omega\rightarrow\mathcal{X}\times\mathcal{Y}$となる可測関数である。この確率変数列$\mathcal{D}(=\{X_i\}_{i=1}^n)$を入力データと呼ぶ。
+ここで、独立同分布な確率変数列$\mathcal{D}\coloneqq\{X_i(\omega)\}_{i=1}^n$を考える。各$X_i$は$X_i\colon\Omega\to\mathcal{X}\times\mathcal{Y}$となる可測関数である。この確率変数列$\mathcal{D}(=\{X_i\}_{i=1}^n)$を入力データと呼ぶ。
 
 増大情報系$\mathcal{F}_0\subset\mathcal{F}_1(\subset\mathcal{F})$を考える。$\mathcal{F}_0$はデータ観測前の保持情報、$\mathcal{F}_1$はデータ観測後の保持情報である。すなわち
 \begin{align}
-\mathcal{F}_1:=\mathcal{F}_0\vee\sigma([X_i]^n_{i=1})
+\mathcal{F}_1\coloneqq\mathcal{F}_0\vee\sigma([X_i]^n_{i=1})
 \end{align}
 
-連続写像$f:\mathcal{X}\rightarrow\mathcal{Y}$の満たす集合全体を$Z$と表記する。モデルに対応した$Z$の部分集合(詳細は後述)を$Z_M$と書く。
+連続写像$f\colon\mathcal{X}\to\mathcal{Y}$の満たす集合全体を$Z$と表記する。モデルに対応した$Z$の部分集合(詳細は後述)を$Z_M$と書く。
 
-連続汎関数$F:Z\rightarrow\mathbb{R}$の集合を$Z^*$と書く。$Z^*$の位相は弱位相であるとし、$\mathcal{F}_1$-可測な確率変数$F^*:\Omega\rightarrow Z^*$によって定義される$F_\mathcal{D}:=F^*(\omega)$に対して
+連続汎関数$F\colon Z\to\mathbb{R}$の集合を$Z^*$と書く。$Z^*$の位相は弱位相であるとし、$\mathcal{F}_1$-可測な確率変数$F^*\colon\Omega\to Z^*$によって定義される$F_\mathcal{D}\coloneqq F^*(\omega)$に対して
 \begin{align}
-\hat{f}:=argmin_{f\in Z_M}F_\mathcal{D}(f)
+\hat{f}\coloneqq\argmin_{f\in Z_M}F_\mathcal{D}(f)
 \end{align}
 
 を満たす$\hat{f}\in Z_M$を見つける。これが機械学習における大枠の問題設定である。
