@@ -10,13 +10,13 @@
 \DeclareMathOperator*{\argmin}{argmin}
 
 
-\title{機械学習原論（体験版）}
+\title{数学科向け機械学習入門（体験版）}
 \author{}
 
 \begin{document}
 \maketitle
 
-\section{はじめに}　
+\section{はじめに}
 世は空前の人工知能ブーム。猫も杓子もAIだディープラーニングだと、なんでも機械学習に任せてしまえばいいという考えが蔓延している。
 
 機械学習エンジニアの待遇の良さや需要の高さを耳にする機会は多いことだろう。かつて数学徒の目指す職種としてありがちだったクオンツやアクチュアリーと違い、スーツを着ることを強要されるのが少ないという点も魅力的だ。そうなると「自分も機械学習を学んでAIエンジニアになり、ガッポガッポ大儲け。タワーマンションの上層階でたくさん女侍らして、高級ワインを飲むんじゃあ！」という思考になり、機械学習の本に手が伸びる数学徒も少なくないことかと思う。
@@ -52,7 +52,7 @@
 
 特に表記がなければ、すべての可測空間のσ加法族はボレル集合族、線形空間に対応する体は実数体であるものとする。
 
-線形位相空間$\mathcal{X}$を特徴量空間、線形位相空間$\mathcal{Y}$をラベル空間と呼び、それぞれの元$x,y$を「特徴量」「ラベル」と呼ぶ。
+線形距離空間$\mathcal{X}$を特徴量空間、線形距離空間$\mathcal{Y}$をラベル空間と呼び、それぞれの元$x,y$を「特徴量」「ラベル」と呼ぶ。
 
 ここで、データから何らかの「よい」写像$f:\mathcal{X}\to\mathcal{Y}$を構成するのが「機械学習」である。機械学習とは、関数近似の機構なのである。
 
@@ -88,7 +88,7 @@ $\hat{\theta}$の$\mathcal{F}_0$-条件付き確率、$\mathcal{F}_1$-条件付�
 特徴量空間$\mathcal{X}$、ラベル空間$\mathcal{Y}$、データ$\mathcal{D}$、評価関数$F_\mathcal{D}$、事前分布$p(\theta)$、事後分布$p(\theta|\mathcal{D})$、超事前分布$p(\theta_0)
 $、パラメータ$\hat{\theta}$の可測性、パラメータと$f$の関係$\theta^*(\theta)$をまとめて$(\mathcal{X},\mathcal{Y},\mathcal{D},F_\mathcal{D},p(\theta),p(\theta|\mathcal{D}),p(\theta_0),\hat{\theta}-mesurable,\theta^*(\theta))$と表記し、これを今後「機械学習問題」と呼ぶことにする。
 
-これができるだけ「よい」関数になるよう調整したい。このとき$\hat{f}$が実現できる範囲の集合こそが$\mathcal{Z}_M$であり、一般には「仮説集合」と呼ばれる。(ちなみに、$\hat{\theta}_0,\hat{\theta}$が共に$\mathcal{F}_1$-可測であれば、これは$Im(\theta^*)$と一致する)よ
+これができるだけ「よい」関数になるよう調整したい。このとき$\hat{f}$が実現できる範囲の集合こそが$\mathcal{Z}_M$であり、一般には「仮説集合」と呼ばれる。(ちなみに、$\hat{\theta}_0,\hat{\theta}$が共に$\mathcal{F}_1$-可測であれば、これは$Im(\theta^*)$と一致する)
 
 また、$\hat{\theta}_0$が$\mathcal{F}_0$-可測で$\hat{\theta}$が$\mathcal{F}_1$-可測である場合を頻度論的機械学習問題と呼び、$\hat{\theta}_0$が$\mathcal{F}_0$-可測だが$\hat{\theta}$が$\mathcal{F}_1$-可測でない場合をベイズ論的機械学習問題と呼ぶ。ベイズ論の解説は次章にて。
 
@@ -173,7 +173,7 @@ kの満たしている条件などの詳細は4章にて。
 \subsubsection{ニューラルネットワーク}
 最近流行りの手法である。ここではシャロウニューラルネットについて解説する。
 
-ハイパーパラメータは中間層ノード数、ステップ数、学習率の３つである。これらをそれぞれ$N\in\mathbb{N},Step\in\mathbb{N},\alpha\in\mathbb{R}$と表記する。すなわち$\Theta_0:=\mathbb{N}^2\times\mathbb{R}$
+ハイパーパラメータは中間層ノード数、ステップ数、学習率の３つである。これらをそれぞれ$N\in\mathbb{N},Step\in\mathbb{N},\epsilon\in\mathbb{R}$と表記する。すなわち$\Theta_0:=\mathbb{N}^2\times\mathbb{R}$
 
 パラメータに関しては、$a\in\mathbb{R}^d,b\in\mathbb{R},C\in\mathbb{C}$と表記する。今後a,bの存在する空間$\mathbb{R}^{d+1}$のことを$\mathbb{Y}^{d+1}$と書く。このa,b,Cの組を$N$と同数用意するため、$\Theta:=(\mathbb{Y}^{d+1}\times\mathbb{C})^N$となる。
 
@@ -196,7 +196,7 @@ F_\mathcal{D}(f):=\frac{1}{2}\Sigma^n_{i=1}||f(X_i)-Y_i||^2_\mathcal{Y}
 すなわち、mステップ目のあるパラメータ$\theta^m_j$を$\theta^{m+1}_j$に更新する式は
 
 \begin{align}
-\theta^{m+1}_j:=\theta^m_j-\alpha\nabla_{\theta_j}\frac{\partial F_\mathcal{D}(f)}{\partial \theta_j}|_{\theta^m_j}
+\theta^{m+1}_j:=\theta^m_j-\epsilon\nabla_{\theta_j}\frac{\partial F_\mathcal{D}(f)}{\partial \theta_j}|_{\theta^m_j}
 \end{align}
 
 すなわち、損失関数を$\theta$の関数ととらえて、各$\theta_j$ごとに傾きの方向大きさに応じてそちら方面に摺り寄せる。これをStep回繰り返す。
@@ -223,9 +223,10 @@ F_\mathcal{D}(f):=\frac{1}{2}\Sigma^n_{i=1}||f(X_i)-Y_i||^2_\mathcal{Y}
 \begin{enumerate}
 \item MCMCを利用する
 \item 共役事前分布を利用する
+\item 変分推論
 \end{enumerate}
 
-2.2項ではこの2つの手法について解説する。
+2.2項ではこの1.2の手法について解説する。
 
 \begin{theo}ベイズの定理
 
@@ -267,13 +268,24 @@ $\{\theta_1,\theta_2,......,\theta_N\}$と$N$個の$\theta$を事後分布に従
 
 という計算で$x$に対する周辺分布が計算できる。ただし、$p(y|x)$は$D=(X,Y)$に対して$X=x$が成り立つときの条件付き密度。$p(y|x,\theta)$も同様に定義される。
 
+\subsection{変分推論}
+
+変分推論とは、$\Theta$上のわかりやすい密度関数$q(\theta)$を、なるべく$p(\theta|\mathcal{D})$に似せよう、という手法である。実現可能な$q$の集合を$\mathcal{Q}$とおき。
+\begin{align}
+\hat{q}:=argmin_{a\in\mathcal{Q}}KL(q||p)
+\end{align}
+
+によって$q$を求める。
+
+$KL(q||p)$は、カルバックライブラー情報量と呼ばれる基準で、$p$と$q$の間の、ある種の「距離」を表す。
+
 　
 
-ベイズの測度論を用いた厳密な定式化は、主に渡辺澄夫氏によって研究されている。渡辺氏の理論では平気な顔して代数幾何が登場するので、興味がある人はぜひ調べてみよう。ここではそのような領域にまでは立ち入らない。微分幾何の議論を使いまくる情報幾何学もおすすめだ。
+ベイズの測度論を用いた厳密な定式化は、主に渡辺澄夫氏によって研究されている。渡辺氏の理論では平気な顔して代数幾何が登場するので、興味がある人はぜひ調べてみよう。ここではそのような領域にまでは立ち入らない。情報量基準による議論を微分幾何学でゴリ押しする情報幾何学もおすすめだ。
 
 \newpage
 \section{再生核ヒルベルト空間とカーネル法}
-この章では、前章で簡単にしか触れられなかったカーネル法の、もっと詳細な理論的背景を解説する。
+この章では、前章で簡単にしか触れられなかったカーネル法の、もっと詳細な理論的背景の入り口を解説する。
 \subsection{再生核ヒルベルト空間}
 \begin{defi}カーネル関数
 
@@ -297,8 +309,23 @@ k(x_i,x_j)=k(x_j,x_i)\\
 \end{defi}
 
 \subsection{カーネル表現定理}
+上記の設定を踏襲したうえで、$f\in\mathcal{H},b\in\mathcal{Y}$と置く。前々章の問題設定でいうと$\mathcal{Z}_M=\mathcal{H}+\mathcal{Y}$と書ける。ここで損失関数は一般には次のように表記できる。
+\begin{align}
+F_\mathcal{D}(f+b):=L(f+b;\mathcal{D})+\Psi(||f||_\mathcal{H})
+\end{align}
 
+ただし、$L:\mathcal{Z}_M\to\mathbb{R},\Psi:\mathbb{R}\to\mathbb{R}$であり、$\Psi$は単調非減少関数である。このとき、次の定理が成り立つ。
+\begin{theo}カーネル表現定理
 
+$f+b\in\mathcal{Z}_M$とする。このとき、$F_\mathcal{D}$を最小化するような$\hat{f}\in\mathcal{H},\hat{b}\in\mathcal{Y}$が存在すれば、そのような$f\in\mathcal{H}$の中に
+\begin{align}
+f(x)=\Sigma^n_{i=1}\hat{a}_ik(x,X_i)
+\end{align}
+
+と表記できるものが存在する。
+
+ただし、$\{\hat{a}_i\}^n_{i=1}\in\Theta$である。
+\end{theo}
 
 
 
@@ -323,9 +350,57 @@ f(x)=\int_{\mathbb{Y}^{d+1}}(\mathcal{R}_\psi f)(a,b)\eta(a\cdot x-b)dadb
 \subsection{活性化関数が有界な場合}
 まずは$\eta\in L^\infty(\mathbb{R}\to\mathbb{C})$が成り立つ場合について解説する。
 
+\begin{defi}リッジレット変換
+
+$f\in L^1(\mathbb{R}^d\to\mathbb{C})$のリッジレット関数$\psi\in L^\infty(\mathbb{R}\rightarrow\mathbb{C})$によるリッジレット変換は、次のように定義される。
+\begin{align}
+(\mathcal{R}_\psi f)(a,b):=\int_{\mathbb{R}^{d}}f(\bm{x})\overline{\psi(a\cdot\bm{x}-b)}|a|^sd\bm{x}
+\end{align}
+ただし、$s$は非負実数。0か1を使うことが多い。
+\end{defi}
+
+このリッジレット作用素の双対作用素はこのようになる。
+
+\begin{defi}双対リッジレット変換
+関数$T\in L^1(\mathbb{{Y}^{d+1}}\rightarrow\mathbb{C};|a|^{-s}dadb)$の、活性化関数$\eta\in L^\infty(\mathbb{R}\rightarrow\mathbb{C})$による双対リッジレット変換は
+\begin{align}
+(\mathcal{R}^*_\psi T)(x):=\int_\mathbb{Y}^{d+1}T(a,b)\eta(a\cdot x-b)|a|^{-s}dadb
+\end{align}
+となる。
+\end{defi}
+
+このリッジレット関数と活性化関数に対して、次の許容条件を定義する。
+
+\begin{defi}許容条件
+関数$f$に対して、$\hat{f}$で$f$のフーリエ変換を表すとする。
+
+次の積分$K_{\eta,\psi}$が収束し、かつ０でないとき、この活性化関数とリッジレット関数の組$(\eta,\psi)$は許容的であるという。
+\begin{align}
+K_{\eta,\psi}:=(2\pi)^{d-1}\int_\mathbb{R}\frac{\overline{\hat{\psi}(\xi)}\hat{\eta}(\xi)}{|\xi|^d}d\xi
+\end{align}
+\end{defi}
+
+そして、次の式がニューラルネットによる近似可能性の一つの答えを出す定理である。
+
+\begin{theo}再構成公式
+$f,\hat{f}\in L^1(\mathbb{R}^d\rightarrow\mathbb{C})$で、$(\eta,\psi)$は許容的な組み合わせであるとする。
+\begin{align}
+\mathcal{R}^*_\eta\mathcal{R}_\psi f(x)=K_{\eta,\psi}f(x)
+\end{align}
+
+が、$\mathcal{X}$上a.eで成り立つ。
+\end{theo}
 
 \subsection{活性化関数が有界でない場合}
 機械学習に取り組んだことのある方は疑問に思ったことだろう。「じゃあ$\eta$がReluやSwishのような、どう見ても$L^\infty$じゃない場合はどうするのか」と。
+
+実際既存の積分表現理論は、活性化関数の有界性に甘えていた。しかし、Reluが有用である理由の一つに「勾配が消失しない」というものがあり、これは非有界性と切り離すことができない。2015年に出た論文である[10]によって、ようやく非有界な活性化関数の一部に対しても積分表現理論を行えるようになった。（[10]を読めば、非有界な活性化関数を持つニューラルネットを数学的に扱うことがいかに大変で、論文著者が苦労したかよくわかる）
+
+活性化関数のクラスを拡張した代償は、リッジレット関数の範囲である。活性化関数を$L^\infty$から$\mathcal{S}^`$に広げた代わりに、リッジレット関数がとれる範囲は$L^\infty$から$\mathcal{S}$まで縮小している。
+
+それに加え、一定の条件を満たせばリッジレット変換は$L^2$に一意的に拡張でき、$L^2$関数に対する再構成公式も定義できる。
+
+この関数解析的な議論を活かしたアルゴリズムについては[5]を参照。
 
 
 \newpage
@@ -395,7 +470,7 @@ Y_{t_{n+1}}\approx Y_{t_n}-f(Y_{t_n},(\nabla_xu)(t_n,\xi+W_{t_n}))(t_{n-2}-t_{n-
 \subsection{数値解析の深層学習への応用}
 
 \subsubsection{深層学習とは}
-これまでの章で扱ったニューラルネットワークは、入力層と隠れ層と出力層が１つずつであったが、ここからは隠れ層が２つ以上のもの、つまり$n$層パーセプトロン$(n>3)$を扱っていく。
+これまでの章で扱ったニューラルネットワークは、入力層と隠れ層と出力層が１つずつであったが、ここからは隠れ層が２つ以上のもの、つまり$N$層パーセプトロン$(N>3)$を扱っていく。
 
 近年、結果をあげている深層学習アルゴリズムの層数は圧倒的に深くなっている。数年前は結果を出しているのはせいぜい８層、22層程度だったが、2015年に某大会で152層のニューラルネットワークが成果を上げたのを皮切りに、現在では1000層を超えるネットワークも使われている。
 
@@ -435,14 +510,59 @@ shake-shake-model
 
 しゃけしゃけモデルとは、その「シェイクシェイク」と2度も言うことからわかる通り、まさに計算結果をシェイクするモデルである。
 
-$\gamma~\mathcal{U}(0,1)$とし、これはブロックごとステップごとに新たに生成される乱数である。そして$n$ブロック目の入力を$X_n$と置くと
+$\gamma_n$を(0,1)上の一様分布に従う確率変数とする。これはブロックごとステップごとに新たに生成される乱数である。そして$n$ブロック目の入力を$X_n$と置くと
 
 \begin{align}
-X_{n+1}=X_n+\gamma f_1(X_n)+(1-\gamma)f_2(X_n) 
+X_{n+1}=X_n+\gamma_n f_1(X_n)+(1-\gamma_n)f_2(X_n) 
 \end{align}
 
 これは、確率微分方程式の離散近似と見做せ、[7]の著者は別のSDE数値解析技術を用いて精度の向上を行った。
 
+\subsection{確率的勾配法と確率微分方程式}
+最近、機械学習界隈（の極一部）で盛り上がっている考察である。
+
+近年は、ミニバッチ学習のことを確率的勾配法と呼ぶことが多く、この場でもそれに倣う。
+
+通常のバッチ学習において、勾配はこのように決定される。
+\begin{align}
+\frac{dC}{d\omega}:=\Sigma_{i=1}^n \frac{dC_i}{d\omega}
+\end{align}
+
+ただし、$C_i$は、データ$D_i$に対する損失である。
+
+確率的勾配法においては、勾配はこう書ける。
+
+\begin{align}
+\frac{d\hat{C}}{d\omega}:=\frac{n}{B}\Sigma_{j=1}^B \frac{dC_{i_j}}{d\omega}
+\end{align}
+
+確率的勾配法における１ステップごとのパラメータ変化は
+
+\begin{align}
+\Delta\omega=\frac{\epsilon}{n}(\frac{dC}{d\omega}+(\frac{d\hat{C}}{d\omega}-\frac{dC}{d\omega}))
+\end{align}
+
+と書ける。ここで$\frac{dC}{d\omega}$は、$\mathcal{F}_t$-可測だが、$\alpha := (\frac{d\hat{C}}{d\omega}-\frac{dC}{d\omega})$はステップごとに独立な確率変数である。$E[\alpha]=0,E[\alpha^2]=n(\frac{n}{B}-1)F(\omega)$($F(\omega)$は$\omega$毎に定まる定数)であり、$\alpha$は$\mathcal{F}_{t+1}$-可測であるため、伊藤の表現定理より、ある確率１で$[t,t+1]$上$L^2$である適合過程$f(s)$が存在し
+\begin{align}
+\alpha = \int^{t+1}_t f(s)dB_s
+\end{align}
+
+と表記することができる。$\alpha$の分散と伊藤積分の等長性より、$f(s)=\sqrt{n(\frac{n}{B}-1)F(\omega)}$が成り立ち、それによって(45)式は
+\begin{align}
+d\omega=\frac{\epsilon}{n}\frac{dC}{d\omega}dt+\frac{\epsilon}{n}f(t)dB_t
+\end{align}
+
+という確率微分方程式の離散化だと見做すことができる。
+
+だから何だと思うかもしれない。同感だ。実際、確率的勾配法を確率微分方程式と見做すことによる明確な御利益は現時点ではない。（[11]ではこれによって最適なミニバッチサイズがバッチサイズに比例することを導き出したと主張しているが、それは$\alpha$の平均分散を求めれば十分であり、わざわざSDEの議論に持ち込む意味はない。おそらく論文著者が確率微分方程式を使ってみたかっただけである）
+
+応用数学には予言性が必要だ。つまり、「数学的なこんな概念で記述できた」だけでは意味はなく、その応用先の学問を発展させて初めて価値を持つ。カタストロフィー理論はそれができずに廃れた。
+
+例えば、積分表現理論はそれによってアルゴリズムの改善につながり、またニューラルネットによる近似可能性を証明したから価値がある。カーネルトリックの研究も、それによってカーネル法がうまくいく理由を証明できたことによって存在価値が保証された。6-2で解説した残差学習を微分方程式の離散化と捉えた研究も、このことにより超深層学習の設計に対して新たな一石を投じたから意味があるのだ。
+
+そのため、このSGDをSDEと捉える考え方にも、現時点ではほぼ価値がない。だが、この考察がなんの意味もない無駄なものだったかというと、私はそうは思わない。この先、確率解析学の言葉を用いた議論による発展で、新たなアルゴリズムが開発されたり、「経験的にうまくいっている」だけだったアルゴリズムに収束性の証明が成されたりするかもしれないのだ。
+
+私はここからマリアヴァン解析の議論に持ち込み、渡辺-吉田理論を用いて漸近的な性質を示したりできるのではないか、などと考えているが、それは今後の課題である。
 
 
 \newpage
@@ -468,6 +588,13 @@ X_{n+1}=X_n+\gamma f_1(X_n)+(1-\gamma)f_2(X_n)
   \bibitem{キー} BEYOND FINITE LAYER NEURALNETWORKS:BRIDGING DEEP ARCHITECTURES AND NUMERICAL DIFFERENTIAL EQUATIONS,Yiping Lu,Aoxiao Zhong,Quanzheng Li(2017)
   \bibitem{キー} カーネル法の新展開ーその理論と応用ー,福水健次(2012)
   \bibitem{キー} 統計的学習理論,金森敬文(2015)
+  \bibitem{キー} Neural Network with Unbounded Activation Functions is
+Universal Approximator,Sho Sonoda,Noboru Murata1(2015)
+  \bibitem{キー} A BAYESIAN PERSPECTIVE ON GENERALIZATION AND
+STOCHASTIC GRADIENT DESCENT,Samuel.L.Smith,Quoc.V.L(2017)
+  \bibitem{キー} Non-Convex Learning via Stochastic Gradient Langevin
+Dynamics: A Nonasymptotic Analysis,Maxim Raginsky,Alexander Rakhlin,Matus Telgarsky(2017)
+  \bibitem{キー} 数理統計学,吉田朋友(2006)
 \end{thebibliography}
 
 
